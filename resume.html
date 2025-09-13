@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Christopher Wright - Software Engineer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background-color: #ecf0f1;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header .title {
+            font-size: 1.3em;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
+        .header .contact {
+            font-size: 1em;
+            opacity: 0.8;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 5px;
+        }
+
+        .summary {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #2c3e50;
+            background: #ecf0f1;
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 4px solid #34495e;
+        }
+
+        .experience-item, .education-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 3px solid #764ba2;
+            background: #fafafa;
+        }
+
+        .experience-item h3 {
+            color: #333;
+            font-size: 1.2em;
+            margin-bottom: 5px;
+        }
+
+        .company {
+            color: #2c3e50;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .date {
+            color: #888;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .skill-category h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .skill-tag {
+            background: #667eea;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+
+        .highlight {
+            background: #ffeaa7;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        /* Animation styles */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .skill-tag {
+            background: #34495e;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .skill-tag:hover {
+            background: #2c3e50;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(44, 62, 80, 0.3);
+        }
+
+        .experience-item, .education-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 3px solid #34495e;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+
+        .experience-item:hover, .education-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-left: 3px solid #2c3e50;
+        }
+
+        .section h2 {
+            color: #667eea;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .section h2:hover {
+            color: #34495e;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+            animation: slideInFromTop 1s ease;
+        }
+
+        @keyframes slideInFromTop {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header .title {
+            font-size: 1.3em;
+            opacity: 0.9;
+            margin-bottom: 15px;
+            animation: slideInFromTop 1s ease 0.2s both;
+        }
+
+        .header .contact {
+            font-size: 1em;
+            opacity: 0.8;
+            animation: slideInFromTop 1s ease 0.4s both;
+        }
+
+        .download-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(44, 62, 80, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .download-btn:hover {
+            background: #34495e;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(44, 62, 80, 0.4);
+        }
+
+        @media print {
+            .download-btn {
+                display: none;
+            }
+        }
+
+        /* PDF Mode - disable animations and transitions */
+        .pdf-mode * {
+            animation: none !important;
+            transition: none !important;
+            transform: none !important;
+            opacity: 1 !important;
+        }
+
+        .pdf-mode .fade-in {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 0;
+                box-shadow: none;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="download-btn" onclick="downloadPDF()">📄 Download PDF</button>
+    <div class="container">
+        <div class="header">
+            <h1>Christopher Wright</h1>
+            <div class="title">Senior Software Engineer & AI Automation Specialist</div>
+            <div class="contact">
+                Austin, Texas | LinkedIn: https://www.linkedin.com/in/christopher-wright-0840821a/
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <h2>Professional Summary</h2>
+                <div class="summary">
+                    Experienced software engineer with a proven track record in consumer services technology. Specializes in leveraging <span class="highlight">AI-powered development tools like Claude, Cursor, and ChatGPT</span> to accelerate development workflows and deliver innovative solutions. Expert in modern development practices with a focus on automation, efficiency, and cutting-edge technology integration. Strong communicator who bridges the gap between complex technical concepts and business objectives.
+                </div>
+            </div>
+
+
+            <div class="section">
+                <h2>Professional Experience</h2>
+                
+                <div class="experience-item fade-in">
+                    <h3>Senior Software Engineer</h3>
+                    <div class="company">Talroo - Austin, Texas, United States</div>
+                    <div class="date">February 2023 - Present (2 years 6 months)</div>
+                    <div class="description">
+                        • Successfully enhanced revenue through strategic initiatives, optimizing sales processes and delivering outstanding client support.<br>
+                        • Leveraged expertise in Python, Java, and PHP to develop innovative solutions that contributed to business growth.<br>
+                        • Proficiently led and managed a dynamic team responsible for sales support and client assistance, fostering a collaborative and efficient work environment.<br>
+                        • Demonstrated proficiency in cloud technologies by utilizing both AWS and Azure to deploy and maintain scalable applications.<br>
+                        • Actively participated in sprint meetings, facilitating effective communication and coordination within cross-functional teams to achieve project milestones.
+                    </div>
+                </div>
+
+                <div class="experience-item fade-in">
+                    <h3>Software Engineer</h3>
+                    <div class="company">Talroo - Austin, Texas</div>
+                    <div class="date">June 2019 - February 2023 (3 years 9 months)</div>
+                    <div class="description">
+                        • Assumed the role of interim product manager, guiding and steering product initiatives to successful outcomes.<br>
+                        • Developed systems aimed at optimizing the judicious and efficient allocation of clients' advertising budgets to yield enhanced results.<br>
+                        • Received company-wide recognition with an award celebrating exemplary embodiment of the teamwork company value.
+                    </div>
+                </div>
+
+                <div class="experience-item fade-in">
+                    <h3>Associate Software Engineer</h3>
+                    <div class="company">Talroo - Austin, Texas</div>
+                    <div class="date">December 2018 - June 2019 (7 months)</div>
+                    <div class="description">
+                        • Acquired proficiency in new troubleshooting techniques, expanding skill set and enhancing problem-solving abilities.<br>
+                        • Operated effectively under the pressure of system failures, devising prompt interim solutions and implementing comprehensive fixes to ensure continuous business operations.
+                    </div>
+                </div>
+
+                <div class="experience-item fade-in">
+                    <h3>Technical Lead</h3>
+                    <div class="company">Talroo - Austin, Texas Area</div>
+                    <div class="date">August 2018 - December 2018 (5 months)</div>
+                    <div class="description">
+                        • Earned the prestigious CEO Circle Award on two occasions for conceiving innovative growth ideas aligned with current industry trends.<br>
+                        • Implemented task automation strategies, resulting in increased client satisfaction through streamlined processes and timely service delivery.<br>
+                        • Developed and optimized processes that significantly enhanced the efficiency and effectiveness of the client service team, contributing to overall improved service quality.<br>
+                        • Established a comprehensive ticketing system utilizing Salesforce, leading to an elevation in ticket quality and a reduction in instances of missed communications.
+                    </div>
+                </div>
+
+                <div class="experience-item fade-in">
+                    <h3>Technical Analyst</h3>
+                    <div class="company">Talroo - Austin, Texas Area</div>
+                    <div class="date">March 2018 - August 2018 (6 months)</div>
+                    <div class="description">
+                        • Conducted data analysis for the entire sales department, providing crucial insights that informed leadership decisions regarding client strategy.<br>
+                        • Spearheaded the identification of revenue-boosting opportunities and cost-saving measures by developing programs capable of analyzing substantial datasets.<br>
+                        • Thoroughly investigated system bugs and issues, collaborating closely with engineering teams to identify and implement effective solutions.
+                    </div>
+                </div>
+
+                <div class="experience-item fade-in">
+                    <h3>Client Success Analyst</h3>
+                    <div class="company">Talroo - Austin, Texas Area</div>
+                    <div class="date">2017 - March 2018 (1 year)</div>
+                    <div class="description">
+                        • Use independent judgment and decision-making to manage book of business of up to $1MM per month<br>
+                        • Provide excellent service to all internal and external customers at all times<br>
+                        • Assist Sales in bringing new clients on board and set them up in our systems<br>
+                        • Monitor the performance and health of client campaigns and optimize them to ensure continuous improvement<br>
+                        • Use MYSQL to tailor solutions to each client
+                    </div>
+                </div>
+
+                <div class="experience-item fade-in">
+                    <h3>Logistics - Web developer</h3>
+                    <div class="company">Luxe - Austin, Texas</div>
+                    <div class="date">2016 - 2017 (1 year)</div>
+                    <div class="description">
+                        • Maintained the Luxe website by updating pages using HTML, CSS, and JavaScript<br>
+                        • Enhance the customer experience by providing feedback to app development team<br>
+                        • Communicate with logistics and trust & safety team to ensure optimization of the Luxe products<br>
+                        • Quality assurance and testing for the new Hertz on Demand Luxe platform<br>
+                        • Managed operations for 30-40 valets in 6 cities<br>
+                        • Created SQL queries using Chartio to analyze customer / valet interactions
+                    </div>
+                </div>
+
+                <div class="experience-item fade-in">
+                    <h3>Contract Web Developer</h3>
+                    <div class="company">The Wandering Palette and Mary Franco, CPA - Austin, Texas</div>
+                    <div class="date">2015 - 2017 (2 years)</div>
+                    <div class="description">
+                        • Created interactive websites using the latest HTML, CSS, JAVASCRIPT, and PHP Languages<br>
+                        • Used Google analytics to analyze marketing strategy success ratios from traffic<br>
+                        • Provided monthly technical support on an as-needed basis
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Education</h2>
+                <div class="education-item">
+                    <h3>University of Arkansas</h3>
+                    <div class="date">2007 - 2011</div>
+                    <div class="description">
+                        Strong foundation in computer science principles, mathematics, and engineering practices that inform current approach to software development and problem-solving.
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Why AI-Enhanced Engineering Matters</h2>
+                <div class="summary">
+                    In today's rapidly evolving tech landscape, the ability to effectively leverage AI tools for software development is not just an advantage—it's essential. My expertise with <strong>Claude, Cursor, and other AI development tools</strong> enables me to:
+                    <br><br>
+                    ✓ <strong>Accelerate Development Cycles:</strong> Write, debug, and refactor code faster while maintaining high quality<br>
+                    ✓ <strong>Bridge Communication Gaps:</strong> Translate complex technical concepts into clear, actionable insights for stakeholders<br>
+                    ✓ <strong>Drive Innovation:</strong> Stay ahead of technology curves and implement cutting-edge solutions<br>
+                    ✓ <strong>Maximize Team Efficiency:</strong> Coach teams on AI-assisted workflows that multiply productivity<br>
+                    ✓ <strong>Future-Proof Solutions:</strong> Build systems that adapt to and integrate with emerging technologies
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Core Competencies</h2>
+                <div class="skills-grid">
+                    <div class="skill-category">
+                        <h3>AI & Automation</h3>
+                        <div class="skill-list">
+                            <span class="skill-tag">Claude AI Integration</span>
+                            <span class="skill-tag">Cursor IDE</span>
+                            <span class="skill-tag">ChatGPT Workflows</span>
+                            <span class="skill-tag">AI-Assisted Development</span>
+                            <span class="skill-tag">Process Automation</span>
+                        </div>
+                    </div>
+                    <div class="skill-category">
+                        <h3>Software Engineering</h3>
+                        <div class="skill-list">
+                            <span class="skill-tag">Full-Stack Development</span>
+                            <span class="skill-tag">System Architecture</span>
+                            <span class="skill-tag">API Development</span>
+                            <span class="skill-tag">Database Design</span>
+                            <span class="skill-tag">Cloud Platforms</span>
+                        </div>
+                    </div>
+                    <div class="skill-category">
+                        <h3>Modern Tools & Practices</h3>
+                        <div class="skill-list">
+                            <span class="skill-tag">DevOps</span>
+                            <span class="skill-tag">CI/CD Pipelines</span>
+                            <span class="skill-tag">Agile Methodologies</span>
+                            <span class="skill-tag">Code Review</span>
+                            <span class="skill-tag">Technical Leadership</span>
+                        </div>
+                    </div>
+                    <div class="skill-category">
+                        <h3>Communication & Leadership</h3>
+                        <div class="skill-list">
+                            <span class="skill-tag">Technical Writing</span>
+                            <span class="skill-tag">Team Collaboration</span>
+                            <span class="skill-tag">Mentoring</span>
+                            <span class="skill-tag">Stakeholder Management</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationDelay = '0s';
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections and experience items
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.section');
+            const experienceItems = document.querySelectorAll('.experience-item, .education-item');
+            const skillCategories = document.querySelectorAll('.skill-category');
+            
+            sections.forEach((section, index) => {
+                section.style.animationDelay = `${index * 0.1}s`;
+                observer.observe(section);
+            });
+
+            experienceItems.forEach((item, index) => {
+                item.style.animationDelay = `${index * 0.2}s`;
+                observer.observe(item);
+            });
+
+            skillCategories.forEach((category, index) => {
+                category.style.animationDelay = `${index * 0.1}s`;
+                observer.observe(category);
+            });
+
+            // Add stagger animation to skill tags
+            const skillTags = document.querySelectorAll('.skill-tag');
+            skillTags.forEach((tag, index) => {
+                tag.style.animationDelay = `${index * 0.05}s`;
+                tag.classList.add('fade-in');
+            });
+
+            // Add click effects to skill tags
+            skillTags.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    this.style.animation = 'none';
+                    this.offsetHeight; // Trigger reflow
+                    this.style.animation = 'fadeInUp 0.3s ease';
+                });
+            });
+
+            // Smooth scroll for any internal links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Add typing animation to the header title
+            const title = document.querySelector('.header .title');
+            const titleText = title.textContent;
+            title.textContent = '';
+            
+            let i = 0;
+            function typeWriter() {
+                if (i < titleText.length) {
+                    title.textContent += titleText.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 50);
+                }
+            }
+            
+            setTimeout(typeWriter, 1000);
+        });
+
+        // PDF Download Function
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const button = document.querySelector('.download-btn');
+            const body = document.body;
+            
+            // Hide the download button and enable PDF mode
+            button.style.display = 'none';
+            body.classList.add('pdf-mode');
+            
+            // Wait a moment for styles to apply
+            setTimeout(() => {
+                html2canvas(document.body, {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: '#ecf0f1',
+                    height: window.innerHeight,
+                    width: window.innerWidth,
+                    scrollX: 0,
+                    scrollY: 0
+                }).then(canvas => {
+                    const imgData = canvas.toDataURL('image/png');
+                    const pdf = new jsPDF('p', 'mm', 'a4');
+                    
+                    const imgWidth = 210;
+                    const pageHeight = 295;
+                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                    let heightLeft = imgHeight;
+                    
+                    let position = 0;
+                    
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                    
+                    while (heightLeft >= 0) {
+                        position = heightLeft - imgHeight;
+                        pdf.addPage();
+                        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                        heightLeft -= pageHeight;
+                    }
+                    
+                    pdf.save('Christopher_Wright_Resume.pdf');
+                    
+                    // Restore normal mode and show button
+                    body.classList.remove('pdf-mode');
+                    button.style.display = 'block';
+                }).catch(error => {
+                    console.error('Error generating PDF:', error);
+                    body.classList.remove('pdf-mode');
+                    button.style.display = 'block';
+                });
+            }, 100);
+        }
+    </script>
+</body>
+</html>
