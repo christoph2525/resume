@@ -271,6 +271,42 @@
             transform: translateY(0) !important;
         }
 
+        .pdf-mode .container {
+            box-shadow: none !important;
+            margin: 0 !important;
+            max-width: none !important;
+        }
+
+        .pdf-mode .header {
+            background: #2c3e50 !important;
+            color: white !important;
+        }
+
+        .pdf-mode .experience-item,
+        .pdf-mode .education-item {
+            background: #f8f9fa !important;
+            border-left: 3px solid #34495e !important;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .pdf-mode .skill-tag {
+            background: #34495e !important;
+            color: white !important;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .pdf-mode .section h2 {
+            color: #667eea !important;
+            border-bottom: 2px solid #667eea !important;
+        }
+
+        .pdf-mode .summary {
+            background: #ecf0f1 !important;
+            border-left: 4px solid #34495e !important;
+        }
+
         @media (max-width: 600px) {
             .container {
                 margin: 0;
@@ -568,6 +604,7 @@
             const { jsPDF } = window.jspdf;
             const button = document.querySelector('.download-btn');
             const body = document.body;
+            const container = document.querySelector('.container');
             
             // Hide the download button and enable PDF mode
             button.style.display = 'none';
@@ -575,29 +612,35 @@
             
             // Wait a moment for styles to apply
             setTimeout(() => {
-                html2canvas(document.body, {
+                // Capture the container instead of the entire body for better results
+                html2canvas(container, {
                     scale: 2,
                     useCORS: true,
                     allowTaint: true,
-                    backgroundColor: '#ecf0f1',
-                    height: window.innerHeight,
-                    width: window.innerWidth,
+                    backgroundColor: '#ffffff',
+                    logging: false,
+                    width: container.scrollWidth,
+                    height: container.scrollHeight,
                     scrollX: 0,
-                    scrollY: 0
+                    scrollY: 0,
+                    windowWidth: container.scrollWidth,
+                    windowHeight: container.scrollHeight
                 }).then(canvas => {
-                    const imgData = canvas.toDataURL('image/png');
+                    const imgData = canvas.toDataURL('image/png', 1.0);
                     const pdf = new jsPDF('p', 'mm', 'a4');
                     
-                    const imgWidth = 210;
-                    const pageHeight = 295;
+                    const imgWidth = 210; // A4 width in mm
+                    const pageHeight = 295; // A4 height in mm
                     const imgHeight = (canvas.height * imgWidth) / canvas.width;
                     let heightLeft = imgHeight;
                     
                     let position = 0;
                     
+                    // Add first page
                     pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
                     heightLeft -= pageHeight;
                     
+                    // Add additional pages if needed
                     while (heightLeft >= 0) {
                         position = heightLeft - imgHeight;
                         pdf.addPage();
@@ -614,8 +657,9 @@
                     console.error('Error generating PDF:', error);
                     body.classList.remove('pdf-mode');
                     button.style.display = 'block';
+                    alert('Error generating PDF. Please try again.');
                 });
-            }, 100);
+            }, 500); // Increased delay to ensure all animations complete
         }
     </script>
 </body>
